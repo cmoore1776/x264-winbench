@@ -13,8 +13,9 @@ A Windows app for determining which x264 presets your CPU is capable of using fo
 ## Quick Start
 
 1. Download the latest [.zip release](https://github.com/shamelesscookie/x264-winbench/releases)
-2. Extract and run x264-winbench.exe
-3. Select which resolution/framerate combinations you'd like to test. Options are:
+2. If needed, install [.NET Framework 4.5.2](https://www.microsoft.com/net/download/thank-you/net452)
+3. Extract and run x264-winbench.exe
+4. Select which resolution/framerate combinations you'd like to test. Options are:
 
    * 720p30
    * 720p60
