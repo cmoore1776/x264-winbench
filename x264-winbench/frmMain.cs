@@ -6,12 +6,14 @@ using NReco.VideoConverter;
 using System.IO;
 using System.Threading;
 using System.Diagnostics;
+using System.Management;
 
 namespace x264_winbench
 {
     public partial class frmMain : Form
     {
         List<CancellationTokenSource> taskTokens;
+        int coreCount;
 
         public frmMain()
         {
@@ -20,7 +22,11 @@ namespace x264_winbench
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-
+            coreCount = 0;
+            foreach (var item in new ManagementObjectSearcher("Select * from Win32_Processor").Get())
+            {
+                coreCount += int.Parse(item["NumberOfCores"].ToString());
+            }
         }
         
         private async void btnStart_Click(object sender, EventArgs e)
@@ -40,16 +46,12 @@ namespace x264_winbench
                         if (framerate == 30)
                         {
                             if (!cb720p30.Checked)
-                            {
                                 shouldReturn = true;
-                            }
                         }
                         else
                         {
                             if (!cb720p60.Checked)
-                            {
                                 shouldReturn = true;
-                            }
                         }
                     }
                     else
@@ -57,16 +59,12 @@ namespace x264_winbench
                         if (framerate == 30)
                         {
                             if (!cb1080p30.Checked)
-                            {
                                 shouldReturn = true;
-                            }
                         }
                         else
                         {
                             if (!cb1080p60.Checked)
-                            {
                                 shouldReturn = true;
-                            }
                         }
                     }
 
@@ -93,7 +91,7 @@ namespace x264_winbench
                             VideoCodec = "libx264",
                             VideoFrameRate = framerate,
                             VideoFrameSize = resolution,
-                            CustomOutputArgs = $"-b:v 6000K -bufsize 6000K -preset {preset} -profile high -keyint_min 120 -pix_fmt yuv420p -threads 0"
+                            CustomOutputArgs = $"-b:v 8000K -bufsize 8000K -preset {preset} -profile high -keyint_min {framerate * 2} -pix_fmt yuv420p -threads {coreCount}"
                         };
 
                         var Converter = new FFMpegConverter();
